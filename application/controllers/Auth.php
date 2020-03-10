@@ -30,7 +30,22 @@ class Auth extends CI_Controller
             array(
                 'field' => 'email',
                 'label' => 'Email',
-                'rules' => 'required|trim|valid_email'
+                'rules' => 'required|trim|valid_email|is_unique[user.email]'
+            ),
+            array(
+                'field' => 'password1',
+                'label' => 'Password',
+                'rules' => 'required|trim|min_length[3]|matches[password2]',
+                'errors' => array(
+                    'required' => 'Password is empty',
+                    'matches' => 'Password is not match',
+                    'min_length' => 'Password too short'
+                )
+            ),
+            array(
+                'field' => 'password2',
+                'label' => 'Password',
+                'rules' => 'required|trim|matches[password1]'
             )
         );
         $this->form_validation->set_rules($config);
@@ -38,7 +53,17 @@ class Auth extends CI_Controller
             $data = array('content' => 'auth/registration', 'title' => 'Register page');
             $this->load->view('auth/template', $data);
         } else {
-            echo "data done";
+            $data = [
+                'name' => htmlspecialchars($this->input->post('name', true)),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'image' => 'default.jpg',
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'role_id' => 2,
+                'is_active' => 1,
+                'date_created' => time(),
+            ];
+
+            $this->db->insert('user', $data);
         }
     }
 
