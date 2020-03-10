@@ -9,7 +9,18 @@ class Auth extends CI_Controller
     public function index()
     {
         $data = array('content' => 'auth/login');
-        $this->load->view('theme/index', $data);
+        $this->load->view('auth/template', $data);
+    }
+
+    public function registration()
+    {
+        $data = array('content' => 'auth/registration');
+        $this->load->view('auth/template', $data);
+    }
+
+    public function hal()
+    {
+        echo 'hal';
     }
 }
 

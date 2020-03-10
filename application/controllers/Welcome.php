@@ -23,4 +23,9 @@ class Welcome extends CI_Controller
 	{
 		$this->load->view('theme/index');
 	}
+	
+    public function hal()
+    {
+        echo 'hal';
+    }
 }
