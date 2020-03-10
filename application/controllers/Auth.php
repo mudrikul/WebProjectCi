@@ -30,7 +30,10 @@ class Auth extends CI_Controller
             array(
                 'field' => 'email',
                 'label' => 'Email',
-                'rules' => 'required|trim|valid_email|is_unique[user.email]'
+                'rules' => 'required|trim|valid_email|is_unique[user.email]',
+                'errors' => array(
+                    'is_unique' => 'Email already exist',
+                )
             ),
             array(
                 'field' => 'password1',
@@ -60,10 +63,15 @@ class Auth extends CI_Controller
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'role_id' => 2,
                 'is_active' => 1,
-                'date_created' => time(),
+                'date_created' => date("y:m:d"),
             ];
 
             $this->db->insert('user', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Your account has been created !
+          </div>');
+
+            redirect('auth', 'refresh');
         }
     }
 
