@@ -15,8 +15,61 @@ class Auth extends CI_Controller
 
     public function index()
     {
-        $data = array('content' => 'auth/login', 'title' => 'login page');
-        $this->load->view('auth/template', $data);
+        $config = array(
+            array(
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'required|trim'
+            ),
+            array(
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'required|trim|valid_email',
+            ),
+        );
+        $this->form_validation->set_rules($config);
+        if ($this->form_validation->run() == FALSE) {
+            $data = array('content' => 'auth/login', 'title' => 'login page');
+            $this->load->view('auth/template', $data);
+        } else {
+            $this->_login();
+        }
+    }
+
+
+    private function _login()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        $user = $this->db->get_where('user', ['email' => $email])->row_array();
+
+        if ($user) {
+            if ($user['is_active'] == 1) {
+                if (password_verify($password, $user['password'])) {
+                    $data = [
+                        'email' => $user['email'],
+                        'role_id' => $user['role_id']
+                    ];
+
+                    $this->session->set_userdata($data);
+
+                    redirect('user');
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    Your password is wrong!</div>');
+                    redirect('auth', 'refresh');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                Your email is not been activated !</div>');
+                redirect('auth', 'refresh');
+            }
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+            Your email is not registered !</div>');
+            redirect('auth', 'refresh');
+        }
     }
 
     public function registration()
@@ -60,7 +113,7 @@ class Auth extends CI_Controller
                 'name' => htmlspecialchars($this->input->post('name', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'image' => 'default.jpg',
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
                 'role_id' => 2,
                 'is_active' => 1,
                 'date_created' => date("y:m:d"),
@@ -68,17 +121,24 @@ class Auth extends CI_Controller
 
             $this->db->insert('user', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-            Your account has been created !
-          </div>');
+            Your account has been created !</div>');
 
             redirect('auth', 'refresh');
         }
     }
 
-    public function hal()
+    public function logOut()
     {
-        echo 'hal';
+
+        $this->session->unset_userdata('email');
+        $this->session->unset_userdata('role_id');
+
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Your have been log out !</div>');
+
+        redirect('auth', 'refresh');
     }
 }
 
-/* End of file Controllername.php */
+/* End of file Auth.php */
