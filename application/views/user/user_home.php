@@ -53,7 +53,11 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $userName ?></span>
-                            <img class="img-profile rounded-circle" src="<?= base_url('assets/img/') . $userPicture ?>">
+                            <img class="img-profile rounded-circle" src="<?php if ($userPicture != 'default.jpg') {
+                                                                                echo $userPicture;
+                                                                            } else {
+                                                                                echo base_url('assets/img/') . $userPicture;
+                                                                            } ?>">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -62,7 +66,7 @@
                                 Profile
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <a class="dropdown-item" href="<?= base_url('auth/logout') ?>" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -79,6 +83,12 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                <?php
+                echo $this->session->userdata('log');
+
+                echo $this->session->userdata('email');
+                echo $this->session->userdata('role_id');
+                ?>
 
             </div>
             <!-- /.container-fluid -->
@@ -120,7 +130,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="<?= base_url('auth/logout') ?>">Logout</a>
             </div>
         </div>
     </div>
