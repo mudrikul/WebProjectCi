@@ -8,9 +8,14 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
-        echo "login sukses " . $data['user']['name'];
+        $userData = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data = array(
+            'userName' => $userData['name'],
+            'userPicture' => $userData['image'],
+            'content' => 'user/user_home',
+            'title' => 'user home'
+        );
+        $this->load->view('user/template', $data);
     }
 }
 

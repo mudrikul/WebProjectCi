@@ -53,7 +53,7 @@ class Auth extends CI_Controller
                     ];
 
                     $this->session->set_userdata($data);
-
+                    // jika sukses login
                     redirect('user');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
