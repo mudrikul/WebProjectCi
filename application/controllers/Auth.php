@@ -11,9 +11,7 @@ class Auth extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
 
-        $log = $this->session->userdata('log');
-
-        if ($log) {
+        if ($this->session->userdata('status') == "login") {
 
             redirect(base_url('user'), 'refresh');
         }
@@ -57,7 +55,7 @@ class Auth extends CI_Controller
                     $data = [
                         'email' => $user['email'],
                         'role_id' => $user['role_id'],
-                        'log' => TRUE
+                        'status' => "login"
                     ];
 
                     $this->session->set_userdata($data);
@@ -140,9 +138,7 @@ class Auth extends CI_Controller
 
         $this->session->unset_userdata('email');
         $this->session->unset_userdata('role_id');
-        $this->session->unset_userdata('log');
-
-        $this->session->set_userdata('log', FALSE);
+        $this->session->unset_userdata('status');
 
         $this->session->sess_destroy();
 

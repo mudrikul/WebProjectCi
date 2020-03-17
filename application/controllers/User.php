@@ -9,11 +9,11 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $log = $this->session->userdata('log');
+        $log = $this->session->userdata('status');
 
-        if (!$log) {
+        if ($log != "login") {
 
-            redirect('auth', 'refresh');
+            redirect(base_url('auth'), 'refresh');
         }
     }
 
