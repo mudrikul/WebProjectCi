@@ -54,3 +54,10 @@
     </div>
 
 </div>
+
+<?php
+echo $this->session->userdata('log');
+
+echo $this->session->userdata('email');
+echo $this->session->userdata('role_id');
+?>

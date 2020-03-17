@@ -10,6 +10,11 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+
+        // if ($this->session->userdata('status') == "login") {
+
+        //     redirect(base_url('user'), 'refresh');
+        // }
     }
 
 
@@ -49,11 +54,12 @@ class Auth extends CI_Controller
                 if (password_verify($password, $user['password'])) {
                     $data = [
                         'email' => $user['email'],
-                        'role_id' => $user['role_id']
+                        'role_id' => $user['role_id'],
+                        'status' => "login"
                     ];
 
                     $this->session->set_userdata($data);
-
+                    // jika sukses login
                     redirect('user');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
@@ -127,17 +133,17 @@ class Auth extends CI_Controller
         }
     }
 
-    public function logOut()
+    public function logout()
     {
 
         $this->session->unset_userdata('email');
         $this->session->unset_userdata('role_id');
-
+        $this->session->unset_userdata('status');
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
             Your have been log out !</div>');
 
-        redirect('auth', 'refresh');
+        redirect(base_url(), 'refresh');
     }
 }
 
