@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class User extends CI_Controller
+class Admin extends CI_Controller
 {
 
     public function __construct()
@@ -26,11 +26,11 @@ class User extends CI_Controller
             'userName' => $userData['name'],
             'userEmail' => $userData['email'],
             'userPicture' => $userData['image'],
-            'content' => 'user/user_home',
-            'title' => 'My Profile'
+            'content' => 'admin/admin_home',
+            'title' => 'Dashboard'
         );
-        $this->load->view('user/template', $data);
+        $this->load->view('admin/template', $data);
     }
 }
 
-/* End of file User.php */
+/* End of file Admin.php */

@@ -60,7 +60,11 @@ class Auth extends CI_Controller
 
                     $this->session->set_userdata($data);
                     // jika sukses login
-                    redirect('user');
+                    if ($user['role_id'] == 1) {
+                        redirect('admin');
+                    } else {
+                        redirect('user');
+                    }
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                     Your password is wrong!</div>');
@@ -122,7 +126,7 @@ class Auth extends CI_Controller
                 'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
                 'role_id' => 2,
                 'is_active' => 1,
-                'date_created' => date("y:m:d"),
+                'date_created' => time(),
             ];
 
             $this->db->insert('user', $data);
