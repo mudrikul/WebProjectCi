@@ -1,6 +1,6 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <h3><?= $title ?></h3>
+
     <div class="card mb-3 shadow-sm" style="max-width: 540px;">
         <div class="row no-gutters">
             <div class="col-md-4">
